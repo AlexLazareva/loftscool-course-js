@@ -37,6 +37,15 @@ function map(array, fn) {
  Посмотрите как работает reduce и повторите это поведение для массива, который будет передан в параметре array
  */
 function reduce(array, fn, initial) {
+    let i = 0;
+    let result = initial || array[i++];
+
+    while (i < array.length) {
+        result = fn(result, array[i], i, array);
+        i++;
+    }
+
+    return result;
 }
 
 /*
@@ -67,6 +76,36 @@ function upperProps(obj) {
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 function slice(array, from, to) {
+    var arr = [];
+    var last = to > array.length ? array.length : to;
+    var begin = (-from > array.length) ? 0 : from;
+    if ((from < 0) > ( to < 0)) {
+        return arr;
+    }
+    if (from > array.length || from == to || to < from) {
+
+        return arr;
+    }
+
+    if (from >= 0) {
+        for (var i = begin; i < last; i++) {
+            arr.push(array[i]);
+        }
+    } else if (to < 0) {
+        for (i = begin; i < last + array.length; i++) {
+            arr.push(array[i]);
+        }
+    } else if (from < 0) {
+        for (i = array.length + begin; i < last; i++) {
+            arr.push(array[i]);
+        }
+    } else if (from < 0 && to < 0) {
+        for (i = array.length + begin; i < array.length + last; i++) {
+            arr.push(array[i]);
+        }
+    }
+
+    return arr;
 }
 
 /*
@@ -76,6 +115,13 @@ function slice(array, from, to) {
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
 function createProxy(obj) {
+    return new Proxy(obj, {
+        set(target, prop, value) {
+            target[prop] = value * value;
+
+            return true;
+        }
+    });
 }
 
 export {
