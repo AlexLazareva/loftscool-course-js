@@ -48,6 +48,16 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
+    let arr = [];
+
+    for (let prop in obj) {
+        if (!obj.hasOwnProperty(prop)) {
+            continue;
+        }
+        arr.push(prop.toUpperCase());
+    }
+
+    return arr;
 }
 
 /*
