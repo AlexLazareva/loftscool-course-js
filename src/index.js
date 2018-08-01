@@ -76,33 +76,26 @@ function upperProps(obj) {
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 function slice(array, from, to) {
-    var arr = [];
-    var last = to > array.length ? array.length : to;
-    var begin = (-from > array.length) ? 0 : from;
-    if ((from < 0) > ( to < 0)) {
-        return arr;
-    }
-    if (from > array.length || from == to || to < from) {
+    let arr = [];
 
-        return arr;
+    from = (typeof from !== 'undefined') ? from : 0;
+    to = (typeof to !== 'undefined') ? to : array.length;
+
+    from = getNormalVariable(from);
+    to = getNormalVariable(to);
+
+    function getNormalVariable(direct) {
+        if (direct < 0) {
+            direct = (Math.abs(direct) > array.length) ? 0 : direct + array.length;
+        } else {
+            direct = (direct > array.length) ? array.length : direct;
+        }
+
+        return direct;
     }
 
-    if (from >= 0) {
-        for (var i = begin; i < last; i++) {
-            arr.push(array[i]);
-        }
-    } else if (to < 0) {
-        for (i = begin; i < last + array.length; i++) {
-            arr.push(array[i]);
-        }
-    } else if (from < 0) {
-        for (i = array.length + begin; i < last; i++) {
-            arr.push(array[i]);
-        }
-    } else if (from < 0 && to < 0) {
-        for (i = array.length + begin; i < array.length + last; i++) {
-            arr.push(array[i]);
-        }
+    while (from < to) {
+        arr.push(array[from++]);
     }
 
     return arr;
