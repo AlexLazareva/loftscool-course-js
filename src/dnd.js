@@ -27,6 +27,13 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
+    let div = document.createElement('div');
+    let randomNum = (max, min) => (Math.random() * (max - min) + min);
+
+    div.classList.add('draggable-div');
+    div.style.height = randomNum(255, 10) + 'px';
+    div.style.width = randomNum(255, 10) + 'px';
+    div.style.position = 'fixed';
 }
 
 /*
