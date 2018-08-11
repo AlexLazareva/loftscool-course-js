@@ -1,3 +1,4 @@
+
 /* ДЗ 4 - работа с DOM */
 
 /*
@@ -22,10 +23,12 @@ function createDivWithText(text) {
 /*
  Задание 2:
 
+
  Функция должна вставлять элемент, переданный в переметре what в начало элемента, переданного в параметре where
 
  Пример:
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
+
  */
 function prepend(what, where) {
     where.insertBefore(what, where.firstChild);
@@ -92,10 +95,12 @@ function findError(where) {
 /*
  Задание 5:
 
+
  Функция должна перебрать все дочерние узлы элемента переданного в параметре where и удалить из него все текстовые узлы
 
  Задачу необходимо решить без использования рекурсии, то есть можно не уходить вглубь дерева.
  Так же будьте внимательны при удалении узлов, т.к. можно получить неожиданное поведение при переборе узлов
+
 
  Пример:
    После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
@@ -210,6 +215,7 @@ function collectDOMStat(root) {
 
  Рекомендуется использовать MutationObserver
 
+
  Пример:
    Если в where или в одного из его детей добавляется элемент div
    то fn должна быть вызвана с аргументом:
@@ -226,6 +232,7 @@ function collectDOMStat(root) {
      type: 'remove',
      nodes: [div]
    }
+
  */
 function observeChildNodes(where, fn) {
     let infoObj = {
