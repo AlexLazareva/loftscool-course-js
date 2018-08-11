@@ -1,5 +1,6 @@
 
 
+
 import { assert } from 'chai';
 import { randomValue } from '../helper';
 import {
@@ -38,8 +39,8 @@ describe('ДЗ 4 - Работа с DOM', () => {
             let result = createDivWithText(text);
 
             assert.equal(result.innerText, text);
+
         });
-    });
 
     describe('prepend', () => {
         it('должна добавлять элемент в начало', () => {
@@ -68,8 +69,10 @@ describe('ДЗ 4 - Работа с DOM', () => {
 
             assert.isTrue(Array.isArray(result));
             assert.deepEqual(result, [where.children[0], where.children[3]]);
+
         });
     });
+
 
     describe('findError', () => {
         it('должна возвращать массив из текстового содержимого элементов', () => {
@@ -83,8 +86,10 @@ describe('ДЗ 4 - Работа с DOM', () => {
 
             assert.isTrue(Array.isArray(result));
             assert.deepEqual(result, [text1, text2]);
+
         });
     });
+
 
     describe('deleteTextNodes', () => {
         it('должна удалить все текстовые узлы', () => {
@@ -128,8 +133,9 @@ describe('ДЗ 4 - Работа с DOM', () => {
             where.innerHTML = `<p class="${class1}"><b>${text1}</b> <b class="${class1} ${class2}">${text2}</b></p>`;
             result = collectDOMStat(where);
             assert.deepEqual(result, stat);
+
         });
-    });
+
 
     describe('observeChildNodes', () => {
         it('должна вызывать fn при добавлении элементов в указанный элемент', done => {
@@ -240,6 +246,7 @@ describe('ДЗ 4 - Работа с DOM', () => {
             where.innerHTML = '';
 
             document.body.removeChild(where);
+
 
         });
     });

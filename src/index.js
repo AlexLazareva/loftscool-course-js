@@ -1,8 +1,10 @@
 
 /* ДЗ 4 - работа с DOM */
 
+
 /*
  Задание 1:
+
 
  1.1: Функция должна создать элемент с тегом DIV
 
@@ -59,6 +61,7 @@ function findAllPSiblings(where) {
     for (const node of where.childNodes) {
         if (node.nextElementSibling && node.nextElementSibling.tagName == 'P') {
             nodesArray.push(node);
+
         }
     }
 
@@ -66,7 +69,14 @@ function findAllPSiblings(where) {
 }
 
 /*
- Задание 4:
+ Задание 2:
+
+ 2.1: Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
+ Функция должна вернуть true если fn вернула true хотя бы для одного из элементов массива
+
+ 2.2: Необходимо выбрасывать исключение в случаях:
+   - array не массив или пустой массив (с текстом "empty array")
+   - fn не является функцией (с текстом "fn is not a function")
 
  Функция представленная ниже, перебирает все дочерние узлы типа "элемент" внутри узла переданного в параметре where и возвращает массив из текстового содержимого найденных элементов
  Но похоже, что в код функции закралась ошибка и она работает не так, как описано.
@@ -87,12 +97,14 @@ function findError(where) {
 
     for (var i = 0; i < where.children.length; i++) {
         result.push(where.children[i].innerText);
+
     }
 
     return result;
 }
 
 /*
+
  Задание 5:
 
 
@@ -203,9 +215,11 @@ function collectDOMStat(root) {
 /*
  Задание 8 *:
 
+
  8.1: Функция должна отслеживать добавление и удаление элементов внутри элемента переданного в параметре where
  Как только в where добавляются или удаляются элементы,
  необходимо сообщать об этом при помощи вызова функции переданной в параметре fn
+
 
  8.2: При вызове fn необходимо передавать ей в качестве аргумента объект с двумя свойствами:
    - type: типа события (insert или remove)
@@ -265,9 +279,13 @@ function observeChildNodes(where, fn) {
         });
 
     observer.observe(where, config);
+
 }
 
+/* При решении задач, пострайтесь использовать отладчик */
+
 export {
+
     createDivWithText,
     prepend,
     findAllPSiblings,
@@ -276,4 +294,5 @@ export {
     deleteTextNodesRecursive,
     collectDOMStat,
     observeChildNodes
+
 };
