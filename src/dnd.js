@@ -34,6 +34,11 @@ function createDiv() {
     div.style.height = randomNum(255, 10) + 'px';
     div.style.width = randomNum(255, 10) + 'px';
     div.style.position = 'fixed';
+    div.style.backgroundColor = '#' + (0x1000000 + (Math.random()) * 0xffffff).toString(16).substr(1, 6);
+    div.style.top = randomNum(window.innerHeight - parseInt(div.style.height) - 20, 20) + 'px';
+    div.style.left = randomNum(window.innerWidth - parseInt(div.style.width) - 20, 20) + 'px';
+
+    return div;
 }
 
 /*
@@ -45,6 +50,27 @@ function createDiv() {
    addListeners(newDiv);
  */
 function addListeners(target) {
+    let coords = {};
+
+    target.addEventListener('mousedown', (e) => {
+        coords = {
+            left: e.clientX - target.getBoundingClientRect() + pageXOffset,
+            top: e.clientY - target.getBoundingClientRect() + pageYOffset
+        };
+
+        document.addEventListener('mousemove', moveTo);
+    });
+
+    target.addEventListener('mouseup', () => {
+        document.removeEventListener('mousemove', moveTo);
+    });
+    
+    function moveTo(e) {
+        e.preventDefault();
+
+        target.style.left = e.clientX - coords.left + 'px';
+        target.style.top = e.clientY - coords.top + 'px';
+    }
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
