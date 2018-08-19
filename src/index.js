@@ -29,13 +29,34 @@ function delayPromise(seconds) {
  Пример:
    loadAndSortTowns().then(towns => console.log(towns)) // должна вывести в консоль отсортированный массив городов
  */
+function compareFunc(a, b) {
+    a = a.name.toLowerCase();
+    b = b.name.toLowerCase();
+
+    return (a > b) ? 1 : (a < b ? -1 : 0);
+}
+
 function loadAndSortTowns() {
-    return new Promise((resolve, reject) => {
-        fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-            .then(res => res.json())
-            .then(towns => resolve(towns.sort((a, b) => a.name.localeCompare(b.name))))
-            .catch((e) => reject(new Error(e)));
-    });
+
+    return new Promise( function( resolve, reject) {
+        let xhr = new XMLHttpRequest(),
+            towns = [];
+
+        xhr.open('GET', 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json', true);
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if (this.readyState != 4) {
+                return
+            }
+
+            if (xhr.status != 200) {
+                reject(xhr.status);
+            } else {
+                towns = JSON.parse(xhr.responseText).sort(compareFunc);
+                resolve(towns);
+            }
+        }
+    })
 }
 
 export {
