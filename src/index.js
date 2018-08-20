@@ -34,20 +34,12 @@ function loadAndSortTowns() {
     return new Promise((resolve, reject) => {
         fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
             .then(res => {
-                let towns = [];
-
-                if (res.status >= 400) {
-                    return Promise.reject();
-                }
-                towns = res.json();
-
-                return towns;
-
+                return res.json();
             })
             .then(towns => {
 
                 towns.sort( (a, b) => {
-                    a.name.localeCompare(b.name);
+                    return a.name.localeCompare(b.name);
                 });
 
                 resolve(towns);
