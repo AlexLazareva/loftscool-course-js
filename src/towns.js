@@ -19,7 +19,7 @@
  то необходимо показать надпись "Не удалось загрузить города" и кнопку "Повторить".
  При клике на кнопку, процесс загруки повторяется заново
  */
-
+import { loadAndSortTowns } from './index';
 /*
  homeworkContainer - это контейнер для всех ваших домашних заданий
  Если вы создаете новые html-элементы и добавляете их на страницу, то дабавляйте их только в этот контейнер
@@ -36,22 +36,9 @@ const homeworkContainer = document.querySelector('#homework-container');
  Массив городов пожно получить отправив асинхронный запрос по адресу
  https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json
  */
+
 function loadTowns() {
-    return new Promise((resolve, reject) => {
-        fetch('https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json')
-            .then(res => {
-                return res.json();
-            })
-            .then(towns => {
-
-                towns.sort( (a, b) => {
-                    return a.name.localeCompare(b.name);
-                });
-
-                resolve(towns);
-            })
-            .catch((e) => reject(new Error(e)));
-    });
+    return loadAndSortTowns();
 }
 
 /*
@@ -66,6 +53,7 @@ function loadTowns() {
    isMatching('Moscow', 'Moscov') // false
  */
 function isMatching(full, chunk) {
+    return full.toUpperCase().indexOf(chunk.toUpperCase()) !== -1;
 }
 
 /* Блок с надписью "Загрузка" */
@@ -77,8 +65,53 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
-filterInput.addEventListener('keyup', function() {
-    // это обработчик нажатия кливиш в текстовом поле
+document.addEventListener('DOMContentLoaded', function() {
+    let townsList = [];
+
+    const hideLoadMsg = () => {
+        loadingBlock.style.display = 'none';
+        filterBlock.style.display = 'block';
+    };
+
+    const showLoadMsg = () => {
+        loadingBlock.style.display = 'block';
+        filterBlock.style.display = 'none';
+    };
+
+    const inputListen = () => {
+        filterResult.innerHTML = '';
+
+        if (filterInput.value === '') {
+            return;
+        }
+
+        let townsFilter = townsList.filter(town => isMatching(town.name, filterInput.value));
+
+        renderTowns(townsFilter);
+    };
+
+    const renderTowns = (towns) => {
+        towns.forEach((town) => {
+            let div = document.createElement('div');
+
+            div.textContent = town.name;
+            filterResult.appendChild(div);
+        });
+    };
+
+    (function getTowns() {
+        showLoadMsg();
+
+        loadTowns()
+            .then((towns) => {
+                hideLoadMsg();
+                townsList = towns;
+                filterInput.addEventListener('keyup', inputListen);
+            })
+            .catch(() => {
+                loadingBlock.style.display = 'none';
+            })
+    })();
 });
 
 export {
