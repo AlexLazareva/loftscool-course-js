@@ -43,10 +43,36 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
+let createNewRow = (name, value) => {
+    let newRow = document.createElement('tr');
+    let nameTD = document.createElement('td');
+    let valueTD = document.createElement('td');
+    let deleteTD = document.createElement('td');
+    let deleteBtn = document.createElement('button');
+
+    nameTD.innerHTML = name;
+    valueTD.innerHTML = value;
+    deleteTD.appendChild(deleteBtn);
+    deleteBtn.textContent = 'удалить';
+
+    listTable.appendChild(newRow);
+    newRow.appendChild(nameTD);
+    newRow.appendChild(valueTD);
+    newRow.appendChild(deleteTD);
+
+    return newRow;
+};
+
+let setCookie = () => {
+    createNewRow(addNameInput.value, addValueInput.value);
+    addNameInput.value = '';
+    addValueInput.value = '';
+};
+
 filterNameInput.addEventListener('keyup', function() {
     // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
 });
 
 addButton.addEventListener('click', () => {
-    // здесь можно обработать нажатие на кнопку "добавить cookie"
+    setCookie();
 });
