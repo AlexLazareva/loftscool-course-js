@@ -65,39 +65,40 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
+let townsList = [];
+
+const hideLoadMsg = () => {
+    loadingBlock.style.display = 'none';
+    filterBlock.style.display = 'block';
+};
+
+const showLoadMsg = () => {
+    loadingBlock.style.display = 'block';
+    filterBlock.style.display = 'none';
+};
+
+const inputListen = () => {
+    filterResult.innerHTML = '';
+
+    if (filterInput.value === '') {
+        return;
+    }
+
+    let townsFilter = townsList.filter(town => isMatching(town.name, filterInput.value));
+
+    renderTowns(townsFilter);
+};
+
+const renderTowns = (towns) => {
+    towns.forEach((town) => {
+        let div = document.createElement('div');
+
+        div.textContent = town.name;
+        filterResult.appendChild(div);
+    });
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-    let townsList = [];
-
-    const hideLoadMsg = () => {
-        loadingBlock.style.display = 'none';
-        filterBlock.style.display = 'block';
-    };
-
-    const showLoadMsg = () => {
-        loadingBlock.style.display = 'block';
-        filterBlock.style.display = 'none';
-    };
-
-    const inputListen = () => {
-        filterResult.innerHTML = '';
-
-        if (filterInput.value === '') {
-            return;
-        }
-
-        let townsFilter = townsList.filter(town => isMatching(town.name, filterInput.value));
-
-        renderTowns(townsFilter);
-    };
-
-    const renderTowns = (towns) => {
-        towns.forEach((town) => {
-            let div = document.createElement('div');
-
-            div.textContent = town.name;
-            filterResult.appendChild(div);
-        });
-    };
 
     (function getTowns() {
         showLoadMsg();
@@ -110,6 +111,26 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .catch(() => {
                 loadingBlock.style.display = 'none';
+
+                let message = document.createElement('p');
+                let button = document.createElement('button');
+
+                message.textContent = 'Не удалось загрузить города';
+                button.textContent = 'Повторить';
+
+                homeworkContainer.appendChild(message);
+                homeworkContainer.appendChild(button);
+
+                button.addEventListener('click', () => {
+                    homeworkContainer.removeChild(message);
+                    homeworkContainer.removeChild(button);
+
+                    loadTowns();
+
+                    if (townsList === []) {
+                        message.textContent = 'Не удалось загрузить города';
+                    }
+                });
             })
     })();
 });
