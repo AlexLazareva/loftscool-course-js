@@ -22,11 +22,7 @@
 
  Запрещено использовать сторонние библиотеки. Разрешено пользоваться только тем, что встроено в браузер
  */
-window.addEventListener('DOMContentLoaded', function() {
-    let cookiesList = getAllCookies();
 
-    renderTable(cookiesList);
-});
 /*
  homeworkContainer - это контейнер для всех ваших домашних заданий
  Если вы создаете новые html-элементы и добавляете их на страницу, то дабавляйте их только в этот контейнер
@@ -47,8 +43,15 @@ const addButton = homeworkContainer.querySelector('#add-button');
 // таблица со списком cookie
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
+// Получить список cookie при загрузке страницы
+window.addEventListener('DOMContentLoaded', () => {
+    let cookiesList = getAllCookies();
+
+    renderTable(cookiesList);
+});
+
 function getAllCookies() {
-    //if (!document.cookie) return;
+    if (!document.cookie) return;
 
     let cookiesList = document.cookie.split('; ').reduce((prev, current) => {
         const [name, value] = current.split('=');
@@ -61,16 +64,17 @@ function getAllCookies() {
     return cookiesList;
 }
 
-let renderTable = (cookiesList) => {
+let renderTable = (list) => {
 
     listTable.innerHTML = '';
 
-    for (let cookie in cookiesList) {
-        listTable.appendChild(createNewRow(cookie, cookiesList[cookie]));
+    for (let item in list) {
+        listTable.appendChild(createNewRow(item, list[item]));
     }
 
 };
 
+/**/
 function createNewRow(name, value) {
     let newRow = document.createElement('tr');
     let nameTD = document.createElement('td');
@@ -115,7 +119,20 @@ function deleteCookie() {
     }
 }
 
-filterNameInput.addEventListener('keyup', renderTable);
+function filterTable() {
+    let filter = filterNameInput.value;
+    let cookies = getAllCookies();
+
+    for (let name in cookies) {
+        if (!name.includes(filter) && !cookies[name].includes(filter)) {
+            delete cookies[name];
+        }
+    }
+
+    renderTable(cookies);
+}
+
+filterNameInput.addEventListener('keyup', filterTable);
 
 addButton.addEventListener('click', () => {
     setCookie(addNameInput.value, addValueInput.value);
