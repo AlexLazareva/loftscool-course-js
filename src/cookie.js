@@ -22,7 +22,11 @@
 
  Запрещено использовать сторонние библиотеки. Разрешено пользоваться только тем, что встроено в браузер
  */
+window.addEventListener('DOMContentLoaded', function() {
+    let cookiesList = getAllCookies();
 
+    renderTable(cookiesList);
+});
 /*
  homeworkContainer - это контейнер для всех ваших домашних заданий
  Если вы создаете новые html-элементы и добавляете их на страницу, то дабавляйте их только в этот контейнер
@@ -44,7 +48,9 @@ const addButton = homeworkContainer.querySelector('#add-button');
 const listTable = homeworkContainer.querySelector('#list-table tbody');
 
 function getAllCookies() {
-    let cookies = document.cookie.split('; ').reduce((prev, current) => {
+    //if (!document.cookie) return;
+
+    let cookiesList = document.cookie.split('; ').reduce((prev, current) => {
         const [name, value] = current.split('=');
 
         prev[name] = value;
@@ -52,12 +58,18 @@ function getAllCookies() {
         return prev;
     }, {});
 
-    return cookies;
+    return cookiesList;
 }
 
-function renderTable() {
+let renderTable = (cookiesList) => {
 
-}
+    listTable.innerHTML = '';
+
+    for (let cookie in cookiesList) {
+        listTable.appendChild(createNewRow(cookie, cookiesList[cookie]));
+    }
+
+};
 
 function createNewRow(name, value) {
     let newRow = document.createElement('tr');
@@ -70,6 +82,10 @@ function createNewRow(name, value) {
     valueTD.innerHTML = value;
     deleteTD.appendChild(deleteBtn);
     deleteBtn.textContent = 'удалить';
+
+    deleteBtn.addEventListener('click', () => {
+        deleteCookie();
+    });
 
     listTable.appendChild(newRow);
     newRow.appendChild(nameTD);
@@ -88,12 +104,22 @@ function setCookie(name, value, expires) {
     document.cookie = cookie;
 }
 
-filterNameInput.addEventListener('keyup', () => {
-    // здесь можно обработать нажатия на клавиши внутри текстового поля для фильтрации cookie
-});
+function deleteCookie() {
+    if (event.target.tagName === 'BUTTON') {
+        let removeElement = event.target.parentNode.parentNode,
+            cookieName = removeElement.firstElementChild.innerText,
+            date = new Date(0);
 
-addButton.addEventListener('click', function() {
+        document.cookie = `${cookieName}=; expires=${date.toUTCString()}`;
+        listTable.removeChild(removeElement);
+    }
+}
+
+filterNameInput.addEventListener('keyup', renderTable);
+
+addButton.addEventListener('click', () => {
     setCookie(addNameInput.value, addValueInput.value);
     addNameInput.value = '';
     addValueInput.value = '';
 });
+
