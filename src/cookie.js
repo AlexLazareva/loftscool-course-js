@@ -101,8 +101,6 @@ function createNewRow(name, value) {
 
 function setCookie(name, value, expires) {
 
-    createNewRow(name, value);
-
     let cookie = `${name}=${value}; expires=${expires || new Date().getDate + 1}`;
 
     document.cookie = cookie;
@@ -136,7 +134,6 @@ filterNameInput.addEventListener('keyup', filterTable);
 
 addButton.addEventListener('click', () => {
     setCookie(addNameInput.value, addValueInput.value);
-    addNameInput.value = '';
-    addValueInput.value = '';
+    filterTable();
 });
 
